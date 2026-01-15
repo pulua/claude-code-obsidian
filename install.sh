@@ -76,11 +76,11 @@ if [[ -f "$CLAUDE_SETTINGS" ]]; then
     # Check if hooks already exist
     if jq -e '.hooks' "$CLAUDE_SETTINGS" > /dev/null 2>&1; then
         # Add to existing hooks
-        jq '.hooks.Stop = [{"matcher": "", "hooks": ["'"$CLAUDE_SCRIPTS_DIR/save-to-obsidian.sh"'"]}]' "$CLAUDE_SETTINGS" > "$CLAUDE_SETTINGS.tmp"
+        jq '.hooks.SessionEnd = [{"matcher": "", "hooks": [{"type": "command", "command": "'"$CLAUDE_SCRIPTS_DIR/save-to-obsidian.sh"'"}]}]' "$CLAUDE_SETTINGS" > "$CLAUDE_SETTINGS.tmp"
         mv "$CLAUDE_SETTINGS.tmp" "$CLAUDE_SETTINGS"
     else
         # Add hooks section
-        jq '. + {"hooks": {"Stop": [{"matcher": "", "hooks": ["'"$CLAUDE_SCRIPTS_DIR/save-to-obsidian.sh"'"]}]}}' "$CLAUDE_SETTINGS" > "$CLAUDE_SETTINGS.tmp"
+        jq '. + {"hooks": {"SessionEnd": [{"matcher": "", "hooks": [{"type": "command", "command": "'"$CLAUDE_SCRIPTS_DIR/save-to-obsidian.sh"'"}]}]}}' "$CLAUDE_SETTINGS" > "$CLAUDE_SETTINGS.tmp"
         mv "$CLAUDE_SETTINGS.tmp" "$CLAUDE_SETTINGS"
     fi
 else
@@ -88,10 +88,15 @@ else
     cat > "$CLAUDE_SETTINGS" << EOF
 {
   "hooks": {
-    "Stop": [
+    "SessionEnd": [
       {
         "matcher": "",
-        "hooks": ["$CLAUDE_SCRIPTS_DIR/save-to-obsidian.sh"]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_SCRIPTS_DIR/save-to-obsidian.sh"
+          }
+        ]
       }
     ]
   }
