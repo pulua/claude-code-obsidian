@@ -37,6 +37,7 @@ The installer will:
 - Ask for your Obsidian vault path
 - Ask for the folder name to save conversations
 - Configure Claude Code hooks for auto-save
+- Install `/save` command for manual save
 
 ## Usage
 
@@ -50,7 +51,7 @@ The installer will:
 
 ### Manual save
 
-**CLI版**: Claudeに「保存して」「Obsidianに保存して」と依頼
+**コマンド**: Claude Codeで `/save` と入力
 
 **直接実行**:
 ```bash
@@ -92,6 +93,8 @@ Obsidianに保存する仕組みを作って
 ├── settings.json              # Claude Code settings with hooks
 ├── scripts/
 │   └── save-to-obsidian.sh    # Main save script
+├── commands/
+│   └── save.md                # /save command definition
 ~/.claude-obsidian-config      # Your configuration
 ```
 
@@ -109,8 +112,9 @@ FOLDER_NAME="Claude"
 ## Uninstall
 
 ```bash
-# Remove scripts
+# Remove scripts and commands
 rm ~/.claude/scripts/save-to-obsidian.sh
+rm ~/.claude/commands/save.md
 
 # Remove configuration
 rm ~/.claude-obsidian-config

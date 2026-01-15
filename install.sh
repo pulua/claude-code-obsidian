@@ -101,6 +101,21 @@ fi
 
 echo "Claude Code hooks configured"
 
+# Create /save command
+CLAUDE_COMMANDS_DIR="$HOME/.claude/commands"
+mkdir -p "$CLAUDE_COMMANDS_DIR"
+
+cat > "$CLAUDE_COMMANDS_DIR/save.md" << 'EOF'
+# Obsidianに会話を保存
+
+この会話をObsidianに保存してください。
+
+以下のコマンドを実行してください：
+~/.claude/scripts/save-to-obsidian.sh
+EOF
+
+echo "/save command installed to: $CLAUDE_COMMANDS_DIR/save.md"
+
 echo ""
 echo "==================================="
 echo "Installation complete!"
@@ -111,6 +126,6 @@ echo "  $FULL_PATH"
 echo ""
 echo "How to use:"
 echo "  - Auto-save: Conversations are saved when you exit Claude Code (/bye)"
-echo "  - Manual save: Ask Claude to 'save to Obsidian' or run:"
-echo "    ~/.claude/scripts/save-to-obsidian.sh"
+echo "  - Manual save: Type '/save' in Claude Code"
+echo "  - Direct run: ~/.claude/scripts/save-to-obsidian.sh"
 echo ""

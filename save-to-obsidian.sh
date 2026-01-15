@@ -77,8 +77,17 @@ fi
     while IFS= read -r line; do
         type=$(echo "$line" | jq -r '.type // empty' 2>/dev/null)
 
-        if [[ "$type" == "human" ]]; then
-            message=$(echo "$line" | jq -r '.message.content // empty' 2>/dev/null)
+        if [[ "$type" == "user" ]]; then
+            # User messages have content as array with text objects
+            message=$(echo "$line" | jq -r '
+                if .message.content | type == "array" then
+                    [.message.content[] | select(.type == "text") | .text] | join("\n")
+                elif .message.content | type == "string" then
+                    .message.content
+                else
+                    empty
+                end
+            ' 2>/dev/null)
             if [[ -n "$message" && "$message" != "null" ]]; then
                 echo "## User"
                 echo ""
